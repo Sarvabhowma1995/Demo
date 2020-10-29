@@ -1,13 +1,7 @@
-FROM openjdk:8-alpine
+# Pull base image 
+From tomcat:8-jre8 
 
-# Required for starting application up.
-RUN apk update && apk add /bin/sh
+# Maintainer 
+MAINTAINER "valaxytech@gmail.com" 
+COPY ./webapp.war /usr/local/tomcat/webapps
 
-RUN mkdir -p /opt/app
-ENV PROJECT_HOME /opt/app
-
-COPY target/flipkart-1.0-SNAPSHOT.jar $PROJECT_HOME/flipkart.jar
-
-WORKDIR $PROJECT_HOME
-
-CMD ["java" ,"-jar","./flipkart.jar"]
