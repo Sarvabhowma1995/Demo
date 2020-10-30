@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+	environment{
+	}
+	stages{
+	    stage('Maven Clean Package'){
+	        steps{
+		        script{
+		            def mavenHome =  tool name: "Maven", type: "maven"
+                    def mavenCMD = "${mavenHome}/bin/mvn"
+                    sh "${mavenCMD} clean package"
+		        }
+		    }
+	    }
+	    stage('Push Docker Image'){
+	        steps{
+	            withCredentials([string(credentialsId: 'Docker', variable: 'Docker')]) {
+		            sh "docker login -u jsarvabhowma -p ${Docker}"
+		        }
+		        sh 'docker push jsarvabhowma/flipkart'
+	        }
+	    }
+	}
+	post {
+	    success {
+	        script{
+		        sh 'echo "successful"'
+		        cleanWs()
+		    }
+	    }
+	    failure {
+	        script{
+		        sh 'echo "failed"'
+		    }
+	    }
+	}
+}
