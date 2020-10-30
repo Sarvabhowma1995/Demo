@@ -25,12 +25,14 @@ pipeline {
 		        sh 'docker push jsarvabhowma/flipkart'
 	        }
 	    }
-		stage("Deploy To Kuberates Cluster"){
-		    kubernetesDeploy(
-			    configs: 'Deployment.yml', 
-                kubeconfigId: 'Config_file',
-                enableConfigSubstitution: true
-			)
+		stage('Deploy To Kuberates Cluster'){
+		    steps{
+		        kubernetesDeploy(
+			        configs: 'Deployment.yml', 
+                    kubeconfigId: 'Config_file',
+                    enableConfigSubstitution: true
+				)
+			}
 		}
 	}
 	post {
