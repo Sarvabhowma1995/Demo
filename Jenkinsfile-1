@@ -25,17 +25,24 @@ pipeline {
 		        sh 'docker push jsarvabhowma/flipkart'
 	        }
 	    }
+		stage("Deploy To Kuberates Cluster"){
+		    kubernetesDeploy(
+			    configs: 'Deployment.yml', 
+                kubeconfigId: 'Config_file',
+                enableConfigSubstitution: true
+			)
+		}
 	}
 	post {
 	    success {
 	        script{
-		        sh 'echo "successful"'
+		        sh 'echo "Thanks you.!! Pipeline successfully executed"'
 		        cleanWs()
 		    }
 	    }
 	    failure {
 	        script{
-		        sh 'echo "failed"'
+		        sh 'echo "failed, Please resolve the issue"'
 		    }
 	    }
 	}
