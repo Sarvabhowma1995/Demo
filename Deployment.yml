@@ -1,24 +1,3 @@
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: myapp-ingress
-  namespace: myapp-ns
-spec:
-  rules:
-    - host: myapp1.sarvanow.xyz
-      http:
-        paths:
-          - backend:
-              serviceName: myapp-svc
-              servicePort: 80
-
-[root@ip-10-0-0-144 ~]#
-[root@ip-10-0-0-144 ~]#
-[root@ip-10-0-0-144 ~]#
-[root@ip-10-0-0-144 ~]#
-[root@ip-10-0-0-144 ~]#
-[root@ip-10-0-0-144 ~]# cat de.yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,26 +23,10 @@ kind: Service
 metadata:
   name: flipkart-svc
 spec:
+  type: NodePort
   selector:
     app: flipkart
   ports:
     - port: 80
       targetPort: 8080
-
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: myapp-ingress
-spec:
-  rules:
-   - host: test.sarvanow.xyz
-     http:
-       paths:
-         - backend:
-            serviceName: flipkart-svc
-            servicePort: 80
-         - path: /webapp
-           backend:
-            serviceName: flipkart-svc
-            servicePort: 80
+      
