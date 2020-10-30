@@ -27,11 +27,9 @@ pipeline {
 	    }
 		stage('Deploy To Kuberates Cluster'){
 		    steps{
-		        kubernetesDeploy(
-			        configs: 'Deployment.yml', 
-                    kubeconfigId: 'Config_file',
-                    enableConfigSubstitution: true
-				)
+		         sh 'scp -r Deployment.yml root@10.0.0.144:/tmp/Deployment.yml'
+			 sh 'ssh root@10.0.0.144 kubectl apply -f /tmp/Deployment.yml'
+			 
 			}
 		}
 	}
