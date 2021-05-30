@@ -15,7 +15,7 @@ pipeline {
 	    }
 		stage('Build Docker Image'){
 		    steps{
-			    sh 'docker build -t jsarvabhowma/webapp:v1 .'
+			    sh 'docker build -t ${IMAGE_NAME} .'
 			}
 		}
 	    stage('Push Docker Image'){
@@ -23,12 +23,12 @@ pipeline {
 					withCredentials([string(credentialsId: 'Docker', variable: 'Docker')]) {
 						sh "docker login -u jsarvabhowma -p ${Docker}"
 		        }
-		        sh 'docker push jsarvabhowma/webapp:v1'
+		        sh 'docker push ${IMAGE_NAME}'
 	        }
 	    }
 		stage('Deploy To Kuberates Cluster'){
 		    steps{
-		         sh 'docker run -d --name sarva -p 808:8080 webapp:v1'
+		         sh 'docker run -d --name sarva -p 808:8080 ${IMAGE_NAME}'
 			 
 			}
 		}
