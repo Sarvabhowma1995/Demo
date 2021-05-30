@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+	stages{
+	    stage('clone repo'){
+		 steps{
+		   git changelog: false, credentialsId: 'github', poll: false, url: 'https://github.com/Sarvabhowma1995/Demo.git'
+		 }
+		}
+	    stage('Maven Clean Package'){
+	        steps{
+		        script{
+                    sh "/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/sarva/bin/mvn clean install"
+		        }
+		    }
+	    }
+		stage('Build Docker Image'){
+		    steps{
+			    sh 'docker build -t jsarvabhowma/webapp:v1 .'
+			}
+		}
+	    stage('Push Docker Image'){
+	        steps{
+					withCredentials([string(credentialsId: 'Docker', variable: 'Docker')]) {
+						sh "docker login -u jsarvabhowma -p ${Docker}"
+		        }
+		        sh 'docker push jsarvabhowma/webapp:v1'
+	        }
+	    }
+		stage('Deploy To Kuberates Cluster'){
+		    steps{
+		         sh 'docker run -d --name sarva -p 808:8080 webapp:v1'
+			 
+			}
+		}
+	}
+}
