@@ -1,0 +1,21 @@
+pipeline {
+    agent {label 'slave1'}
+
+    stages {
+        stage('test') {
+            steps {
+                script {
+                    echo 'Hello World'
+                    //docker.withRegistry( '', 'dockerhub' ) {
+                        docker.image("nginx").inside("-v /usr/bin:/tmp"){
+                        sh """
+                        pwd
+                        ls -larth
+                        """
+                        }
+                    //}
+                }
+            }
+        }
+    }
+}
