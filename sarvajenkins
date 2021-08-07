@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+	environment{
+	    def mavenHome =  tool name: "Maven", type: "maven"
+		def mavenCMD = "${mavenHome}/bin/mvn"
+	}
+	stages{
+	    stage('Maven Clean Package'){
+	        steps{
+		        script{
+                    sh "${mavenCMD} clean install"
+		        }
+		    }
+	    }
+    }
+  }
