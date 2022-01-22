@@ -22,7 +22,7 @@ pipeline {
 	            withCredentials([string(credentialsId: 'Docker', variable: 'Docker')]) {
 		            sh "docker login -u jsarvabhowma -p ${Docker}"
 		        }
-		        sh 'docker push jsarvabhowma/flipkart:v1'
+		        sh 'docker push jsarvabhowma/sumanth:v1'
 	        }
 	    }
     }
