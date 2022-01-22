@@ -25,5 +25,23 @@ pipeline {
 		        sh 'docker push jsarvabhowma/sumanth:v1'
 	        }
 	    }
+	    stage('Deploy To test env'){
+		    steps{
+		         sh 'docker run -d -p 2020:8080 jsarvabhowma/sumanth:v1'
+			}
+		}
     }
+    post {
+	    success {
+	        script{
+		        sh 'echo "Thanks you.!! Pipeline successfully executed"'
+		        cleanWs()
+		    }
+	    }
+	    failure {
+	        script{
+		        sh 'echo "failed, Please resolve the issue"'
+		    }
+	    }
+	}
   }
