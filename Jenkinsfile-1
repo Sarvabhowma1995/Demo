@@ -43,6 +43,7 @@ pipeline {
 	    failure {
 	        script{
 		        sh 'echo "failed, Please resolve the issue"'
+			cleanWs()
 		    }
 	    }
 	}
