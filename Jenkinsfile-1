@@ -9,41 +9,8 @@ pipeline {
 	        steps{
 		        script{
                     sh "${mavenCMD} clean package"
+		    rm -rf ${JENKINS_HOME}/workspace/*
 		        }
-		    }
-	    }
-		stage('Build Docker Image'){
-		    steps{
-			    sh 'docker build -t jsarvabhowma/flipkart .'
-			}
-		}
-	    stage('Push Docker Image'){
-	        steps{
-	            withCredentials([string(credentialsId: 'Docker', variable: 'Docker')]) {
-		            sh "docker login -u jsarvabhowma -p ${Docker}"
-		        }
-		        sh 'docker push jsarvabhowma/flipkart'
-	        }
-	    }
-		stage('Deploy To Kuberates Cluster'){
-		    steps{
-		         sh 'scp -r Deployment.yml root@10.0.0.144:/tmp/Deployment.yml'
-			 sh 'ssh root@10.0.0.144 kubectl apply -f /tmp/Deployment.yml'
-			 
-			}
-		}
-	}
-	post {
-	    success {
-	        script{
-		        sh 'echo "Thanks you.!! Pipeline successfully executed"'
-		        cleanWs()
-		    }
-	    }
-	    failure {
-	        script{
-		        sh 'echo "failed, Please resolve the issue"'
-			cleanWs()
 		    }
 	    }
 	}
