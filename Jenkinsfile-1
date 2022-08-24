@@ -9,7 +9,7 @@ pipeline {
 	        steps{
 		        script{
                     sh "${mavenCMD} clean package"
-		    rm -rf ${JENKINS_HOME}/workspace/*
+		    sh "rm -rf ${JENKINS_HOME}/workspace/*"
 		        }
 		    }
 	    }
