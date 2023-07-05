@@ -9,7 +9,7 @@ pipeline {
 	    stage('Maven Clean Package'){
 	        steps{
 		        script{
-                    sh "/var/lib/jenkins/tools/hudson.tasks.Maven_MavenInstallation/sarva/bin/mvn clean install"
+                    sh "mvn clean install"
 		        }
 		    }
 	    }
