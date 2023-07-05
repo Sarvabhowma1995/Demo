@@ -2,13 +2,13 @@ pipeline {
     agent any
      parameters {
         string(name: 'IMAGE_NAME', defaultValue: 'test-image', description: 'Please provide the image name')
-		string(name: 'RepoName', defaultValue: 'Sarvabhowma1995/Demo.git', description: 'Please provide the image name')
+		string(name: 'RepoUrl', defaultValue: 'https://github.com/Sarvabhowma1995/Demo.git', description: 'Please provide the repo url')
 
      }
 	stages{
 	    stage('clone the repo'){
 		 steps{
-		   git changelog: false, credentialsId: 'github', poll: false, url: 'https://github.com/${env.RepoName}'
+		   git changelog: false, credentialsId: 'github', poll: false, url: RepoUrl
 		 }
 		}
 	    stage('Maven Clean install'){
