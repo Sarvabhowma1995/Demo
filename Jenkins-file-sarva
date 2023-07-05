@@ -42,10 +42,8 @@ pipeline {
 	    }
 		stage('Deploy the application'){
 		    steps{
-				 script{
-					sed -i 's|image:.*|image: ${params.IMAGE_NAME}|' docker-compose.yml
-					docker-compose up -d
-				 }
+					sh "sed -i 's|image:.*|image: ${params.IMAGE_NAME}|' docker-compose.yml"
+					sh "docker-compose up -d"
 			}
 		}
 	}
