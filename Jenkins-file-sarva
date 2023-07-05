@@ -2,17 +2,33 @@ pipeline {
     agent any
      parameters {
         string(name: 'IMAGE_NAME', defaultValue: 'test-image', description: 'Please provide the image name')
+		string(name: 'RepoName', defaultValue: 'Sarvabhowma1995/Demo.git', description: 'Please provide the image name')
+
      }
 	stages{
-	    stage('clone repo'){
+	    stage('clone the repo'){
 		 steps{
-		   git changelog: false, credentialsId: 'github', poll: false, url: 'https://github.com/Sarvabhowma1995/Demo.git'
+		   git changelog: false, credentialsId: 'github', poll: false, url: 'https://github.com/${params.RepoName}'
 		 }
 		}
-	    stage('Maven Clean Package'){
+	    stage('Maven Clean install'){
 	        steps{
 		        script{
                     sh "mvn clean install"
+		        }
+		    }
+	    }
+		stage('Test the code with maven'){
+	        steps{
+		        script{
+                    sh '''
+					mvn test
+					result=$?
+					if [ $result -ne 0 ]; then
+					echo "test failres are present"
+					exit $result
+					fi
+					'''
 		        }
 		    }
 	    }
@@ -23,15 +39,15 @@ pipeline {
 		}
 	    stage('Push Docker Image'){
 	        steps{
-					withCredentials([string(credentialsId: 'Docker', variable: 'Docker')]) {
-						sh "docker login -u jsarvabhowma -p ${Docker}"
+					withCredentials([usernamePassword(credentialsId: 'docker-creds', passwordVariable: 'pass', usernameVariable: 'user')]) {
+						sh "docker login -u ${user} -p ${pass}"
 		        }
 		        sh 'docker push ${IMAGE_NAME}'
 	        }
 	    }
-		stage('Deploy To Kuberates Cluster'){
+		stage('Deploy the application'){
 		    steps{
-		         sh 'docker run -d --name sarva -p 808:8080 ${IMAGE_NAME}'
+		         sh 'docker-compose up -d'
 			 
 			}
 		}
