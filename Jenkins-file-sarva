@@ -29,7 +29,7 @@ pipeline {
 	    }
 		stage('Build Docker Image'){
 		    steps{
-			    sh 'docker build -t ${params.IMAGE_NAME} .'
+			    sh 'docker build -t ${env.IMAGE_NAME} .'
 			}
 		}
 	    stage('Push Docker Image'){
@@ -37,7 +37,7 @@ pipeline {
 					withCredentials([usernamePassword(credentialsId: 'docker-creds', passwordVariable: 'pass', usernameVariable: 'user')]) {
 						sh "docker login -u ${user} -p ${pass}"
 		        }
-		        sh 'docker push ${params.IMAGE_NAME}'
+		        sh 'docker push ${env.IMAGE_NAME}'
 	        }
 	    }
 		stage('Deploy the application'){
