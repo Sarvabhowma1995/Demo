@@ -29,17 +29,15 @@ pipeline {
 	    }
 		stage('Build Docker Image'){
 		    steps{
-				def Image_Name = env.IMAGE_NAME
-			    sh 'docker build -t ${Image_Name} .'
+			    sh 'docker build -t ${params.IMAGE_NAME} .'
 			}
 		}
 	    stage('Push Docker Image'){
 	        steps{
-				def Image_Name = env.IMAGE_NAME
 					withCredentials([usernamePassword(credentialsId: 'docker-creds', passwordVariable: 'pass', usernameVariable: 'user')]) {
 						sh "docker login -u ${user} -p ${pass}"
 		        }
-		        sh 'docker push ${Image_Name}'
+		        sh 'docker push ${params.IMAGE_NAME}'
 	        }
 	    }
 		stage('Deploy the application'){
